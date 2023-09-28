@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0u6kp0h" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.15.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.1.0">
+  <bpmn:process id="simple-camunda-8-example-process" name="Simple camunda 8 example process for DevOps" isExecutable="true">
+    <bpmn:extensionElements>
+      <zeebe:userTaskForm id="userTaskForm_2r3t52r">{
+  "components": [
+    {
+      "text": "# Актуальний курс валют від НБУ на сьогодні",
+      "type": "text",
+      "id": "Field_1denpb3"
+    },
+    {
+      "label": "Доллар США",
+      "type": "textfield",
+      "id": "Field_0j0ml20",
+      "key": "USD",
+      "disabled": true
+    },
+    {
+      "label": "Евро",
+      "type": "textfield",
+      "id": "Field_0vojdfd",
+      "key": "EUR",
+      "disabled": true,
+      "properties": {}
+    }
+  ],
+  "type": "default",
+  "id": "currency-rate-overview-form",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.1.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.4.2"
+  },
+  "schemaVersion": 5
+}</zeebe:userTaskForm>
+    </bpmn:extensionElements>
+    <bpmn:startEvent id="start_event">
+      <bpmn:outgoing>Flow_0cj6ctc</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0cj6ctc" sourceRef="start_event" targetRef="fetch_actual_currency_rate" />
+    <bpmn:sequenceFlow id="Flow_0oylnxj" sourceRef="fetch_actual_currency_rate" targetRef="human_task_check_actual_currency_rate" />
+    <bpmn:endEvent id="end_event">
+      <bpmn:incoming>Flow_0kr9c72</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0kr9c72" sourceRef="human_task_check_actual_currency_rate" targetRef="end_event" />
+    <bpmn:serviceTask id="fetch_actual_currency_rate" name="Отримати актуальний курс валют">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="currency-rate-fetch" retries="2" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0cj6ctc</bpmn:incoming>
+      <bpmn:outgoing>Flow_0oylnxj</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="human_task_check_actual_currency_rate" name="Переглянути курс валют">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:userTaskForm_2r3t52r" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0oylnxj</bpmn:incoming>
+      <bpmn:outgoing>Flow_0kr9c72</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="simple-camunda-8-example-process">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="start_event">
+        <dc:Bounds x="179" y="79" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1699pti_di" bpmnElement="end_event">
+        <dc:Bounds x="672" y="79" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_06mrioe_di" bpmnElement="human_task_check_actual_currency_rate">
+        <dc:Bounds x="510" y="57" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_04qh3ar_di" bpmnElement="fetch_actual_currency_rate">
+        <dc:Bounds x="330" y="57" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0cj6ctc_di" bpmnElement="Flow_0cj6ctc">
+        <di:waypoint x="215" y="97" />
+        <di:waypoint x="330" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0oylnxj_di" bpmnElement="Flow_0oylnxj">
+        <di:waypoint x="430" y="97" />
+        <di:waypoint x="510" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0kr9c72_di" bpmnElement="Flow_0kr9c72">
+        <di:waypoint x="610" y="97" />
+        <di:waypoint x="672" y="97" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
